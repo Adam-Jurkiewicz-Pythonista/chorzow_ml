@@ -8,6 +8,8 @@ with open(plik_wejsciowy, encoding="utf-8") as plik:
 naglowek = wykres[0:4]
 dane = wykres[4:]
 
+nazwa_do_wykresu = naglowek[0].strip()
+
 elementy_y = []
 for element in dane:
     dana = element.split(" ")
@@ -23,7 +25,7 @@ elementy_x = [ x for x in range(len(elementy_y))]
 plt.bar(elementy_x, elementy_y)
 
 # Dodanie tytułu i etykiet osi
-plt.title("Przykładowy wykres słupkowy")
+plt.title(f"Przykładowy wykres słupkowy - {nazwa_do_wykresu} ")
 plt.xlabel("x")
 plt.ylabel("y")
 
