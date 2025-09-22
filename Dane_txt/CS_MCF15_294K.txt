@@ -1,4 +1,4 @@
-CS_MCF15_program-004 2
+CS_MCF15_program-004
 0.012838
 2
 0.3

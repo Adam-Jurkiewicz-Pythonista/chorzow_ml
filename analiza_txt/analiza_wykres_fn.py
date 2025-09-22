@@ -37,7 +37,11 @@ def otworz_plik_wczytaj_dane(nazwa_pliku):
     nazwa_do_wykresu = naglowek[0].strip()
     elementy_y = []
     for element in dane:
-        dana = element.split(" ")
+        dana = element.split()
+        if type(dana) is not list:
+            print("Problem ze splitem")
+            return False, False
+
         for liczba in dana:
             try:
                 elementy_y.append(int(liczba))
@@ -60,11 +64,17 @@ def wykonaj_wykres(elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wykresu='log')
 
 
 # tutaj start skryptu
+# plik_sprawdz = "../Dane_txt/CS_MCF15_294K.txt"
+# elem_y, nazwa_wykresu = otworz_plik_wczytaj_dane(plik_sprawdz)
+# print(elem_y)
+#
 katalog = "../Dane_txt"
 pliki_do_sprawdzenia = wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
 print(f"{pliki_do_sprawdzenia=}")
 for plik_txt in pliki_do_sprawdzenia:
     elem_y, nazwa_wykresu = otworz_plik_wczytaj_dane(plik_txt)
+    print(f"{plik_txt=}")
     if len(elem_y) > 100:
+        print(f"{elem_y=}")
         do_wyswietlenia = przygotuj_dane_do_wyswietlenia(elem_y)
         wykonaj_wykres(do_wyswietlenia,nazwa_wykresu, plik_txt)
