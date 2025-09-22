@@ -8,10 +8,6 @@ with open(plik_wejsciowy, encoding="utf-8") as plik:
 naglowek = wykres[0:4]
 dane = wykres[4:]
 
-# print(f"{naglowek}")
-# print(f"{naglowek=}")
-# print(f"{dane=}")
-
 elementy_y = []
 for element in dane:
     dana = element.split(" ")
@@ -21,8 +17,18 @@ for element in dane:
         except:
             pass
 
-print(f"{elementy_y=}")
-
 elementy_x = [ x for x in range(len(elementy_y))]
 
-print(f"{elementy_x=}")
+# Tworzenie wykresu słupkowego
+plt.bar(elementy_x, elementy_y)
+
+# Dodanie tytułu i etykiet osi
+plt.title("Przykładowy wykres słupkowy")
+plt.xlabel("x")
+plt.ylabel("y")
+
+# Zapis wykresu do pliku
+plt.savefig("wykres_slupkowy.png")
+
+# Wyświetlenie wykresu
+plt.show()
