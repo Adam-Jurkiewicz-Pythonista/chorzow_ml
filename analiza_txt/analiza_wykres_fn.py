@@ -30,4 +30,5 @@ def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt", min_wielkosc=100):
 
 # tutaj start skryptu
 katalog = "../Dane_txt"
-wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
+pliki_do_sprawdzenia = wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
+print(f"{pliki_do_sprawdzenia=}")
