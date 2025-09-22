@@ -16,14 +16,16 @@ def przygotuj_dane_do_wyswietlenia(punkty_y):
 def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt", min_wielkosc=100):
     if not os.path.isdir(nazwa_katalogu):
         return False
-
+    zwracane_pliki = []
     for dirpath, dirname, files in os.walk(nazwa_katalogu):
 
         for each_file in files:
             if maska in each_file:
                 plik_z_danymi = dirpath + "/" + each_file
                 if os.path.getsize(plik_z_danymi)>min_wielkosc:
-                    print(f"{plik_z_danymi=}")
+                    zwracane_pliki.append(plik_z_danymi)
+
+    return zwracane_pliki
 
 
 # tutaj start skryptu
