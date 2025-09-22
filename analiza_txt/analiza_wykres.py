@@ -23,7 +23,7 @@ elementy_x = [ x for x in range(len(elementy_y))]
 
 # Tworzenie wykresu słupkowego
 plt.bar(elementy_x, elementy_y)
-
+plt.yscale('log')
 # Dodanie tytułu i etykiet osi
 plt.title(f"Przykładowy wykres słupkowy - {nazwa_do_wykresu} ")
 plt.xlabel("x")
