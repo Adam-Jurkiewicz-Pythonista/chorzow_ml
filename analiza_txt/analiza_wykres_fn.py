@@ -21,8 +21,9 @@ def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt"):
         print(f"dirpath = {dirpath}")
         print(f"dirname = {dirname}")
         print(f"files = {files}")
-        if maska in files:
-            print(f"{maska=} / {files=}")
+        for each_file in files:
+            if maska in each_file:
+                print(f"{maska=} / {each_file=}")
 
 
 # tutaj start skryptu
