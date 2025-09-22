@@ -47,10 +47,13 @@ def otworz_plik_wczytaj_dane(nazwa_pliku):
 
     return elementy_y, nazwa_do_wykresu
 
-def wykonaj_wykres(elementy_y, typ_wykresu='log'):
+def wykonaj_wykres(elementy_y, nazwa_do_wykresu, typ_wykresu='log'):
     elementy_x = [x for x in range(len(elementy_y))]
     plt.bar(elementy_x, elementy_y)
     plt.yscale('log')
+    plt.title(f"Wykres odcięty od maximum ({elementy_y[0]})- {nazwa_do_wykresu} - ({min(elementy_y)})")
+    plt.xlabel("x")
+    plt.ylabel("y")
 
 
 # tutaj start skryptu
