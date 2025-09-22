@@ -10,8 +10,7 @@ def przygotuj_dane_do_wyswietlenia(punkty_y):
             index_y = ind
 
     odciete_y = punkty_y[index_y:]
-    elementy_x = [ x for x in range(len(odciete_y))]
-    return [elementy_x, odciete_y]
+    return odciete_y
 
 def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt", min_wielkosc=100):
     if not os.path.isdir(nazwa_katalogu):
@@ -31,8 +30,27 @@ def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt", min_wielkosc=100):
 def otworz_plik_wczytaj_dane(nazwa_pliku):
 
     # to-do: napisać ifa, jesli bra pliku to return False
+    with open(nazwa_pliku, encoding="utf-8") as plik:
+        wczytane_dane = plik.readlines()
 
+    naglowek = wczytane_dane[0:4]
+    dane = wczytane_dane[4:]
+    nazwa_do_wykresu = naglowek[0].strip()
+    elementy_y = []
+    for element in dane:
+        dana = element.split(" ")
+        for liczba in dana:
+            try:
+                elementy_y.append(int(liczba))
+            except:
+                pass
 
+    return elementy_y, nazwa_do_wykresu
+
+def wykonaj_wykres(elementy_y, typ_wykresu='log'):
+    elementy_x = [x for x in range(len(elementy_y))]
+    plt.bar(elementy_x, elementy_y)
+    plt.yscale('log')
 
 
 # tutaj start skryptu
