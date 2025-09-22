@@ -28,6 +28,13 @@ def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt", min_wielkosc=100):
     return zwracane_pliki
 
 
+def otworz_plik_wczytaj_dane(nazwa_pliku):
+
+    # to-do: napisać ifa, jesli bra pliku to return False
+
+
+
+
 # tutaj start skryptu
 katalog = "../Dane_txt"
 pliki_do_sprawdzenia = wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
