@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 plik_wejsciowy = "../Dane_txt/CMSX.txt"
 with open(plik_wejsciowy, encoding="utf-8") as plik:
     wykres = plik.readlines()
@@ -20,3 +22,7 @@ for element in dane:
             pass
 
 print(f"{elementy_y=}")
+
+elementy_x = [ x for x in range(len(elementy_y))]
+
+print(f"{elementy_x=}")
