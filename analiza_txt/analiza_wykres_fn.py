@@ -66,7 +66,7 @@ def wykonaj_wykres(elementy_x, elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wy
     plt.bar(elementy_x, elementy_y)
     plt.yscale('log')
     plt.title(f"Wykres odcięty od maximum ({elementy_y[0]})- {nazwa_do_wykresu} - ({min(elementy_y)})")
-    plt.xlabel("x")
+    plt.xlabel("Czas w nanosek")
     plt.ylabel("y")
     plt.savefig(plik_png, dpi=600)
     plt.clf() # czyści ram po zapisie pliku
