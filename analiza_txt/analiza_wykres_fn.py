@@ -34,13 +34,15 @@ def otworz_plik_wczytaj_dane(nazwa_pliku):
 
     naglowek = wczytane_dane[0:4]
     dane = wczytane_dane[4:]
-    nazwa_do_wykresu = naglowek[0].strip()
+    nazwa_do_wykresu = naglowek[0].strip().replace(" ", "_")
+    czas = float(naglowek[1].strip())
+    fwhm = float(naglowek[3].strip())
     elementy_y = []
     for element in dane:
         dana = element.split()
         if type(dana) is not list:
             print("Problem ze splitem")
-            return False, False
+            return False, False, False, False
 
         for liczba in dana:
             try:
@@ -48,11 +50,12 @@ def otworz_plik_wczytaj_dane(nazwa_pliku):
             except:
                 pass
 
-    return elementy_y, nazwa_do_wykresu
+    return elementy_y, nazwa_do_wykresu, czas, fwhm
 
 def wykonaj_wykres(elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wykresu='log'):
     nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(nazwa_pliku))[0]
-    plik_png = f"{nazwa_bez_rozszerzenia}-{nazwa_do_wykresu.strip()}.png"
+    katalog = os.path.dirname(nazwa_pliku)
+    plik_png = f"{katalog}/{nazwa_bez_rozszerzenia}-{nazwa_do_wykresu.strip()}.png"
     elementy_x = [x for x in range(len(elementy_y))]
     plt.bar(elementy_x, elementy_y)
     plt.yscale('log')
@@ -60,7 +63,7 @@ def wykonaj_wykres(elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wykresu='log')
     plt.xlabel("x")
     plt.ylabel("y")
     plt.savefig(plik_png)
-    plt.show()
+    # plt.show()
 
 
 # tutaj start skryptu
@@ -72,7 +75,9 @@ katalog = "../Dane_txt"
 pliki_do_sprawdzenia = wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
 print(f"{pliki_do_sprawdzenia=}")
 for plik_txt in pliki_do_sprawdzenia:
-    elem_y, nazwa_wykresu = otworz_plik_wczytaj_dane(plik_txt)
+    elem_y, nazwa_wykresu, czas, fwhm = otworz_plik_wczytaj_dane(plik_txt)
+    if elem_y is False:
+        continue
     print(f"{plik_txt=}")
     if len(elem_y) > 100:
         print(f"{elem_y=}")
