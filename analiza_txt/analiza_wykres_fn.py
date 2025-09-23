@@ -35,8 +35,12 @@ def otworz_plik_wczytaj_dane(nazwa_pliku):
     naglowek = wczytane_dane[0:4]
     dane = wczytane_dane[4:]
     nazwa_do_wykresu = naglowek[0].strip().replace(" ", "_")
-    czas = float(naglowek[1].strip())
-    fwhm = float(naglowek[3].strip())
+    try:
+        czas = float(naglowek[1].strip())
+        fwhm = float(naglowek[3].strip())
+    except:
+        czas = 0
+        fwhm = 0
     elementy_y = []
     for element in dane:
         dana = element.split()
