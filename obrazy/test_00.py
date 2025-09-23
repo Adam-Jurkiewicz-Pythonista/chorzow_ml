@@ -17,7 +17,7 @@ logging.basicConfig(
 )
 
 
-def wczytaj_pliki_z_katalogu(nazwa_katalogu, typy_plikow=(".jpg",".png"), min_wielkosc=1000):
+def wczytaj_pliki_z_katalogu(nazwa_katalogu, typy_plikow=(".jpg",".bmp"), min_wielkosc=1000):
     if not os.path.isdir(nazwa_katalogu):
         return False
     zwracane_pliki = []
@@ -94,17 +94,33 @@ def image_kmean(file_8bit, clusters=4):
     return segmented_img
 
 
+def all_kmean(pliki_z_danymi):
+    for plik_8bit in pliki_z_danymi:
+        nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(plik_8bit))[0]
+        katalog = os.path.dirname(plik_8bit) + "/kmean/"
+        try:
+            os.mkdir(katalog)
+        except:
+            pass
+        # dla 2 klastrów widać dzialanie.....
+        kmean_img = image_kmean(plik_8bit, clusters=2)
+        image_save2file(kmean_img, katalog+nazwa_bez_rozszerzenia+"_kmean.png")
+
+
+
+
 if __name__ == "__main__":
-    katalog = "img"
+    katalog = "img/"
     pliki_8bit = []
     pliki = wczytaj_pliki_z_katalogu(katalog)
     if pliki:
         for plik in pliki:
+            katalog = os.path.dirname(plik) + "/"
             print(plik)
             file_ok, image = image_file_change2bw(plik)
             if file_ok:
                 nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(plik))[0]
-                plik_do_zapisu = nazwa_bez_rozszerzenia + "_bw.jpg"
+                plik_do_zapisu = katalog+nazwa_bez_rozszerzenia + "_bw.jpg"
                 if image_save2file(plik, image):
                     pliki_8bit.append(plik_do_zapisu)
             else:
@@ -114,9 +130,5 @@ if __name__ == "__main__":
 
 
     # sprawdzanie kmean
-    for plik_8bit in pliki_8bit:
-        nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(plik_8bit))[0]
-        # img = image_read8bit(plik_8bit)
-        kmean_img = image_kmean(plik_8bit, clusters=4)
-        image_save2file(kmean_img, nazwa_bez_rozszerzenia+"_kmean.png")
+    all_kmean(pliki_8bit)
 
