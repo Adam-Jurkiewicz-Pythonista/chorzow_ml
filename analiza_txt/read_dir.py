@@ -30,6 +30,9 @@ while True:
                     # print(f"{elem_y=}")
                     lista_x, lista_y = przygotuj_dane_do_wyswietlenia(elem_y, czas)
                     wykonaj_wykres(lista_x, lista_y, nazwa_wykresu, plik_txt)
+
+            else:
+                print("OK") # to wykona się tylko kiedy for zakończy się poprawnie
         break
 
 window.close()
