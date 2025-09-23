@@ -66,7 +66,9 @@ def wykonaj_wykres(elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wykresu='log')
     plt.title(f"Wykres odcięty od maximum ({elementy_y[0]})- {nazwa_do_wykresu} - ({min(elementy_y)})")
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.savefig(plik_png)
+    plt.savefig(plik_png, dpi=600)
+    plt.clf() # czyści ram po zapisie pliku
+    # print(f"{nazwa_do_wykresu=} / {len(elementy_y)=} {elementy_y=}")
     # plt.show()
 
 
@@ -82,8 +84,8 @@ for plik_txt in pliki_do_sprawdzenia:
     elem_y, nazwa_wykresu, czas, fwhm = otworz_plik_wczytaj_dane(plik_txt)
     if elem_y is False:
         continue
-    print(f"{plik_txt=}")
+    # print(f"{plik_txt=}")
     if len(elem_y) > 100:
-        print(f"{elem_y=}")
+        # print(f"{elem_y=}")
         do_wyswietlenia = przygotuj_dane_do_wyswietlenia(elem_y)
         wykonaj_wykres(do_wyswietlenia,nazwa_wykresu, plik_txt)
