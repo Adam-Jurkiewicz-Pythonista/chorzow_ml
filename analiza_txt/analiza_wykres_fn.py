@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 
-def przygotuj_dane_do_wyswietlenia(punkty_y):
+def przygotuj_dane_do_wyswietlenia(punkty_y, czas):
     maximum = 0
     index_y = 0
     for ind, punkty in enumerate(punkty_y):
@@ -10,7 +10,7 @@ def przygotuj_dane_do_wyswietlenia(punkty_y):
             index_y = ind
 
     odciete_y = punkty_y[index_y:]
-    odciete_x = [ x+index_y for x in range(len(odciete_y))]
+    odciete_x = [ (x+index_y) * czas for x in range(len(odciete_y))]
 
     return odciete_x, odciete_y
 
@@ -89,5 +89,5 @@ for plik_txt in pliki_do_sprawdzenia:
     # print(f"{plik_txt=}")
     if len(elem_y) > 100:
         # print(f"{elem_y=}")
-        lista_x, lista_y = przygotuj_dane_do_wyswietlenia(elem_y)
+        lista_x, lista_y = przygotuj_dane_do_wyswietlenia(elem_y, czas)
         wykonaj_wykres(lista_x, lista_y,nazwa_wykresu, plik_txt)
