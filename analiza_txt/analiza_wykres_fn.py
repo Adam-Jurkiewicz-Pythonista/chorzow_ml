@@ -10,7 +10,9 @@ def przygotuj_dane_do_wyswietlenia(punkty_y):
             index_y = ind
 
     odciete_y = punkty_y[index_y:]
-    return odciete_y
+    odciete_x = [ x+index_y for x in range(len(odciete_y))]
+
+    return odciete_x, odciete_y
 
 def wczytaj_dane_z_katalogu(nazwa_katalogu, maska=".txt", min_wielkosc=100):
     if not os.path.isdir(nazwa_katalogu):
@@ -56,11 +58,11 @@ def otworz_plik_wczytaj_dane(nazwa_pliku):
 
     return elementy_y, nazwa_do_wykresu, czas, fwhm
 
-def wykonaj_wykres(elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wykresu='log'):
+def wykonaj_wykres(elementy_x, elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wykresu='log'):
     nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(nazwa_pliku))[0]
     katalog = os.path.dirname(nazwa_pliku)
     plik_png = f"{katalog}/{nazwa_bez_rozszerzenia}-{nazwa_do_wykresu.strip()}.png"
-    elementy_x = [x for x in range(len(elementy_y))]
+    plt.xlim(elementy_x[0],elementy_x[-1])
     plt.bar(elementy_x, elementy_y)
     plt.yscale('log')
     plt.title(f"Wykres odcięty od maximum ({elementy_y[0]})- {nazwa_do_wykresu} - ({min(elementy_y)})")
@@ -87,5 +89,5 @@ for plik_txt in pliki_do_sprawdzenia:
     # print(f"{plik_txt=}")
     if len(elem_y) > 100:
         # print(f"{elem_y=}")
-        do_wyswietlenia = przygotuj_dane_do_wyswietlenia(elem_y)
-        wykonaj_wykres(do_wyswietlenia,nazwa_wykresu, plik_txt)
+        lista_x, lista_y = przygotuj_dane_do_wyswietlenia(elem_y)
+        wykonaj_wykres(lista_x, lista_y,nazwa_wykresu, plik_txt)
