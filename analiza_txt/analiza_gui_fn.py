@@ -79,15 +79,16 @@ def wykonaj_wykres(elementy_x, elementy_y, nazwa_do_wykresu, nazwa_pliku, typ_wy
 # elem_y, nazwa_wykresu = otworz_plik_wczytaj_dane(plik_sprawdz)
 # print(elem_y)
 #
-katalog = "../Dane_txt"
-pliki_do_sprawdzenia = wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
-print(f"{pliki_do_sprawdzenia=}")
-for plik_txt in pliki_do_sprawdzenia:
-    elem_y, nazwa_wykresu, czas, fwhm = otworz_plik_wczytaj_dane(plik_txt)
-    if elem_y is False:
-        continue
-    # print(f"{plik_txt=}")
-    if len(elem_y) > 100:
-        # print(f"{elem_y=}")
-        lista_x, lista_y = przygotuj_dane_do_wyswietlenia(elem_y, czas)
-        wykonaj_wykres(lista_x, lista_y,nazwa_wykresu, plik_txt)
+if __name__ == "__main__":
+    katalog = "../Dane_txt"
+    pliki_do_sprawdzenia = wczytaj_dane_z_katalogu(katalog,min_wielkosc=1)
+    print(f"{pliki_do_sprawdzenia=}")
+    for plik_txt in pliki_do_sprawdzenia:
+        elem_y, nazwa_wykresu, czas, fwhm = otworz_plik_wczytaj_dane(plik_txt)
+        if elem_y is False:
+            continue
+        # print(f"{plik_txt=}")
+        if len(elem_y) > 100:
+            # print(f"{elem_y=}")
+            lista_x, lista_y = przygotuj_dane_do_wyswietlenia(elem_y, czas)
+            wykonaj_wykres(lista_x, lista_y,nazwa_wykresu, plik_txt)
