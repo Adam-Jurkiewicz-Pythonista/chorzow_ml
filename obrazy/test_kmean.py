@@ -127,5 +127,8 @@ if __name__ == "__main__":
     kmean_img = image_kmean(plik_testowy, clusters=5)
     image_save2file(kmean_img, os.path.splitext(plik_testowy)[0] + "_kmean.jpg")
 
-
+"""
+zapis wszysztich proc. klastrow w csv
+proba obliczenia ile i jakiej wielkosci elips znajduje sie na obrazie jednego klastra
+"""
 
