@@ -113,20 +113,6 @@ def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=None):
     logging.info(f"Done Kmean with {segmented_img.shape=}")
     return segmented_img
 
-def all_kmean(pliki_z_danymi):
-    for plik_8bit in pliki_z_danymi:
-        nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(plik_8bit))[0]
-        katalog = os.path.dirname(plik_8bit) + "/kmean/"
-        try:
-            os.mkdir(katalog)
-        except:
-            pass
-        # dla 2 klastrów widać dzialanie.....
-        kmean_img = image_kmean(plik_8bit, clusters=3)
-        image_save2file(kmean_img, katalog+nazwa_bez_rozszerzenia+"_kmean.png")
-
-
-
 
 if __name__ == "__main__":
     plik_testowy = "test_fotos/test_foto.jpg"
