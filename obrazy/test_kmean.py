@@ -78,12 +78,15 @@ def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=None):
         lista_klastrow_do_wydzielenia = tuple(range(clusters))
 
     # Spłaszcz obraz do 1-wymiarowej tablicy (lista pikseli)
-    log = f"Kmean start {img=} {img.shape=} {clusters=}"
-    logging.info(log)
     pixels = img.reshape(-1, 1)
+    pixels_total = len(pixels)
+    log = f"Kmean start {file_8bit=} {img.shape=} {clusters=} {pixels_total=} "
+    logging.info(log)
 
-    # Model KMeans
-    kmeans = KMeans(n_clusters=clusters) # Liczba klastrów (odcieni)
+    # Model KMeans(n_clusters=cluster, init='xxxxxxxx')
+    # init{‘k-means++’, ‘random’}, callable or array-like of shape (n_clusters, n_features), default=’k-means++’
+    # https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_digits.html#sphx-glr-auto-examples-cluster-plot-kmeans-digits-py
+    kmeans = KMeans(n_clusters=clusters, init='random') # Liczba klastrów (odcieni)
     kmeans.fit(pixels)
 
     # Centroidy - reprezentatywne odcienie
@@ -91,7 +94,7 @@ def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=None):
 
     # Przypisania klastrów dla pikseli
     labels = kmeans.labels_
-    logging.info(f"{centers=} / {labels=}")
+    logging.info(f"{centers=}")
 
     # Odtworzenie obrazu na podstawie centroidów (redukcja ilości odcieni)
     segmented_img = centers[labels].reshape(img.shape)
@@ -101,11 +104,16 @@ def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=None):
     for cluster in lista_klastrow_do_wydzielenia:
         wycinek = centers[cluster]
         background = 0 if wycinek> 200 else 255
-        segmented_img_wycinek = segmented_img
+        segmented_img_wycinek = segmented_img.copy()
         segmented_img_wycinek[segmented_img_wycinek != wycinek] = background
+        # zliczam ilość pixeli
+        count = np.count_nonzero(segmented_img_wycinek == wycinek)
+        procent = count / pixels_total * 100
+        logging.info(f"Liczba pixeli dla {wycinek=} {count=} {procent=}")
         # teraz zapis takiego obrazka
         plik = f"{kmean_dir}/{os.path.splitext(os.path.basename(file_8bit))[0]}_{wycinek}{os.path.splitext(file_8bit)[1]}"
         cv2.imwrite(plik, segmented_img_wycinek)
+
 
 
 
@@ -115,8 +123,8 @@ def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=None):
 
 
 if __name__ == "__main__":
-    plik_testowy = "test_fotos/test_foto.jpg"
-    kmean_img = image_kmean(plik_testowy, clusters=3)
+    plik_testowy = "test_fotos/20250829_144656.jpg"
+    kmean_img = image_kmean(plik_testowy, clusters=5)
     image_save2file(kmean_img, os.path.splitext(plik_testowy)[0] + "_kmean.jpg")
 
 
