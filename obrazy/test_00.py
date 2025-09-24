@@ -1,7 +1,4 @@
-"""
-odcienie szarości
-próba oznacczenia obszaru o oznaczonym od.. do szarości
-"""
+
 import os
 import cv2
 import logging
@@ -9,7 +6,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from datetime import datetime
 
-
+#ustawienie logowaia do pliku
 logging.basicConfig(
     filename=f'obraz_00-{datetime.now().strftime('%Y%m%d-%H%M%S')}.log',
     level=logging.DEBUG,
