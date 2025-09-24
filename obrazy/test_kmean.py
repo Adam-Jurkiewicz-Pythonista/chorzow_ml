@@ -69,7 +69,8 @@ def image_read8bit(file_8bit):
     logging.info(log)
     return True, img
 
-def image_kmean(file_8bit, clusters=4):
+def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=(1,)):
+    # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
     img = cv2.imread(file_8bit, cv2.IMREAD_GRAYSCALE)
     # Spłaszcz obraz do 1-wymiarowej tablicy (lista pikseli)
     log = f"Kmean start {img=} {img.shape=}"
@@ -89,7 +90,19 @@ def image_kmean(file_8bit, clusters=4):
     # Odtworzenie obrazu na podstawie centroidów (redukcja ilości odcieni)
     segmented_img = centers[labels].reshape(img.shape)
 
-    logging.info(f"Done Kmean with {segmented_img} {segmented_img.shape=}")
+    # wydzielenie obrazu
+    for cluster in lista_klastrow_do_wydzielenia:
+        wycinek = centers[cluster]
+        segmented_img_wycinek = segmented_img
+        segmented_img_wycinek[segmented_img_wycinek != wycinek] = 255
+        # teraz zapis takiego obrazka
+        plik = f"{os.path.splitext(file_8bit)[0]}_{wycinek}{os.path.splitext(file_8bit)[1]}"
+        cv2.imwrite(plik, segmented_img_wycinek)
+
+
+
+
+    logging.info(f"Done Kmean with {segmented_img.shape=}")
     return segmented_img
 
 def all_kmean(pliki_z_danymi):
@@ -101,7 +114,7 @@ def all_kmean(pliki_z_danymi):
         except:
             pass
         # dla 2 klastrów widać dzialanie.....
-        kmean_img = image_kmean(plik_8bit, clusters=2)
+        kmean_img = image_kmean(plik_8bit, clusters=3)
         image_save2file(kmean_img, katalog+nazwa_bez_rozszerzenia+"_kmean.png")
 
 
@@ -109,7 +122,7 @@ def all_kmean(pliki_z_danymi):
 
 if __name__ == "__main__":
     plik_testowy = "test_fotos/test_foto.jpg"
-    kmean_img = image_kmean(plik_testowy, clusters=2)
+    kmean_img = image_kmean(plik_testowy, clusters=3)
     image_save2file(kmean_img, os.path.splitext(plik_testowy)[0] + "_kmean.jpg")
 
 
