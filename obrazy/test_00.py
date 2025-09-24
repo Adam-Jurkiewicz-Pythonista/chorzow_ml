@@ -14,15 +14,18 @@ logging.basicConfig(
 )
 
 
-def wczytaj_pliki_z_katalogu(nazwa_katalogu, typy_plikow=(".jpg",".bmp"), min_wielkosc=1000):
+def wczytaj_pliki_z_katalogu(nazwa_katalogu, typy_plikow=("jpg","bmp","jpeg"), min_wielkosc=1000):
     if not os.path.isdir(nazwa_katalogu):
         return False
     zwracane_pliki = []
+    # rekurencyjnie sprawdza podkatalogi
+    # https://github.com/abixadamj/helion-python/blob/main/Rozdzial_7/r7_00_walk.py
     for dirpath, dirname, files in os.walk(nazwa_katalogu):
 
         for each_file in files:
+            ext = os.path.splitext(each_file)[1].lower()
             for maska in typy_plikow:
-                if maska in each_file.lower():
+                if maska in ext:
                     plik_z_danymi = dirpath + "/" + each_file
                     if os.path.getsize(plik_z_danymi)>min_wielkosc:
                         zwracane_pliki.append(plik_z_danymi)
@@ -66,7 +69,6 @@ def image_read8bit(file_8bit):
     logging.info(log)
     return True, img
 
-
 def image_kmean(file_8bit, clusters=4):
     img = cv2.imread(file_8bit, cv2.IMREAD_GRAYSCALE)
     # Spłaszcz obraz do 1-wymiarowej tablicy (lista pikseli)
@@ -90,7 +92,6 @@ def image_kmean(file_8bit, clusters=4):
     logging.info(f"Done Kmean with {segmented_img} {segmented_img.shape=}")
     return segmented_img
 
-
 def all_kmean(pliki_z_danymi):
     for plik_8bit in pliki_z_danymi:
         nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(plik_8bit))[0]
@@ -110,6 +111,7 @@ if __name__ == "__main__":
     katalog = "img/"
     pliki_8bit = []
     pliki = wczytaj_pliki_z_katalogu(katalog)
+    print(f"{pliki=}")
     if pliki:
         for plik in pliki:
             katalog = os.path.dirname(plik) + "/"
@@ -118,7 +120,7 @@ if __name__ == "__main__":
             if file_ok:
                 nazwa_bez_rozszerzenia = os.path.splitext(os.path.basename(plik))[0]
                 plik_do_zapisu = katalog+nazwa_bez_rozszerzenia + "_bw.jpg"
-                if image_save2file(plik, image):
+                if image_save2file(plik_do_zapisu, image):
                     pliki_8bit.append(plik_do_zapisu)
             else:
                 pliki_8bit.append(plik)
