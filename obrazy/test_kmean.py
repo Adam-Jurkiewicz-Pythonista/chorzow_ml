@@ -13,6 +13,8 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s'
 )
 
+kmean_dir = f"kmean_{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+
 
 def wczytaj_pliki_z_katalogu(nazwa_katalogu, typy_plikow=("jpg","bmp","jpeg"), min_wielkosc=1000):
     if not os.path.isdir(nazwa_katalogu):
@@ -69,11 +71,14 @@ def image_read8bit(file_8bit):
     logging.info(log)
     return True, img
 
-def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=(1,)):
+def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=None):
     # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
     img = cv2.imread(file_8bit, cv2.IMREAD_GRAYSCALE)
+    if lista_klastrow_do_wydzielenia is None:
+        lista_klastrow_do_wydzielenia = tuple(range(clusters))
+
     # Spłaszcz obraz do 1-wymiarowej tablicy (lista pikseli)
-    log = f"Kmean start {img=} {img.shape=}"
+    log = f"Kmean start {img=} {img.shape=} {clusters=}"
     logging.info(log)
     pixels = img.reshape(-1, 1)
 
@@ -86,17 +91,20 @@ def image_kmean(file_8bit, clusters=3, lista_klastrow_do_wydzielenia=(1,)):
 
     # Przypisania klastrów dla pikseli
     labels = kmeans.labels_
+    logging.info(f"{centers=} / {labels=}")
 
     # Odtworzenie obrazu na podstawie centroidów (redukcja ilości odcieni)
     segmented_img = centers[labels].reshape(img.shape)
 
     # wydzielenie obrazu
+    os.mkdir(kmean_dir)
     for cluster in lista_klastrow_do_wydzielenia:
         wycinek = centers[cluster]
+        background = 0 if wycinek> 200 else 255
         segmented_img_wycinek = segmented_img
-        segmented_img_wycinek[segmented_img_wycinek != wycinek] = 255
+        segmented_img_wycinek[segmented_img_wycinek != wycinek] = background
         # teraz zapis takiego obrazka
-        plik = f"{os.path.splitext(file_8bit)[0]}_{wycinek}{os.path.splitext(file_8bit)[1]}"
+        plik = f"{kmean_dir}/{os.path.splitext(os.path.basename(file_8bit))[0]}_{wycinek}{os.path.splitext(file_8bit)[1]}"
         cv2.imwrite(plik, segmented_img_wycinek)
 
 
